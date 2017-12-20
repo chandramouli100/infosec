@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Zestall</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- Custom styles for this template -->
+    <link href="css/clean-blog.min.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">Zestall</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          Menu
+          <i class="fa fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="about.html">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="portfolio.html">Portfolio</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="contact.html">Contact</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="masthead" style="background-image: url('img/post-bg.jpg')">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <div class="post-heading">
+              <h1>Vortex0</h1>
+              <h2 class="subheading">Network Programming</h2>
+              <span class="meta">Posted by
+                <a href="contact.html">CJ</a>
+                on November 14, 2017</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Post Content -->
+    <article>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <p>
+              Protostar vulnerable machine has a series of binary exploitation exercises, each increasing in its
+              difficulty. Here, we start with Stack0 of protostar exercise.
+            </p>
+
+              <p class="alert alert-info">
+                Link to Protostar:
+                <a class="text-success" href="https://exploit-exercises.com/protostar/">
+                  https://exploit-exercises.com/protostar/
+                </a>
+              </br>
+              </p>
+
+              <p>
+                Once you have set up your virutal machine with protostar, you can login to it using
+                username as 'user' and password as 'user' (without the quotes). If you are using windows,
+                it would be better if you login with putty or cygwin, if you need to copy and paste between
+                systems.
+              </p>
+
+              <p>
+                Go to the /opt/protostar/bin/ folder to find all the exercises.
+              </br>
+                <code>
+                  cd opt/protostar/bin   #from home folder
+                </code>
+              </p>
+
+              <p>
+                Here, if we check the file format is replies
+                <coode>
+                  file stack0
+                </code>
+              </br>
+              stack0: setuid ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), dynamically linked
+              (uses shared libs), for GNU/Linux 2.6.18, not stripped
+              </p>
+
+              <p>
+                We can execute this program to see what it does.
+                <code>
+                  ./stack0
+                </code>
+              </p>
+
+              <p>
+                It seems to be waiting for an input and typing some random strings
+                gives an output as try again.
+              </p>
+
+              <a href="img/protostar/stack0/img1.png">
+                <img class="img-fluid" src="img/protostar/stack0/img1.png" alt="">
+              </a>
+
+            <p>
+                If we go back to the protostar website, in the description for the stack0,
+                we can see the code used to generate this executable.
+              </br>
+                It seems to be declaring an integer and a character array of size 64. Our challenge here is
+                modify the variable 'modified' from 0 to anything else to change the code flow.
+              </br>
+            </p>
+            <p>
+                As you might have guessed, gets is the method that is going to allow us to do so. So lets first
+                check the man page of gets.
+              </br>
+                After you read the description of it, scroll down to the end where there is a description of its
+                bugs.
+            </p>
+
+              <a href="img/protostar/stack0/img2.png">
+                <img class="img-fluid" src="img/protostar/stack0/img2.png" alt="">
+              </a>
+
+              <p>
+                It doesn't get much clearer than this. Never use gets(). It keeps getting data from the input until
+                return key is pressed and it continue to store characters past the end of buffer. What does this mean?
+                How can you store more than 64 characters when you have allocated only that much space for it?
+              </p>
+
+              <p>
+                To answer that question, we need to understand how variables are stored when a C program is executed.
+                All the variables are stored in a stack, unless it is dynamically allocated memory, in which case it will
+                be stored in a heap.
+              </p>
+
+              <a href="img/protostar/stack0/img5.png">
+                <img class="img-fluid" src="img/protostar/stack0/img5.png" alt="">
+              </a>
+
+              <p>
+                The variable, which is declared first will be pushed into the stack first and so on. Now that buffer variable,
+                is declared after our int to be modified, we can overflow that stack with input so that we are able to change
+                the value in the stack for the variable 'modified'.
+              </p>
+
+              <p>
+                For this exercise, we will just try some increasing length inputs to see if we can break this program. We can
+                use tools like gdb, for the comming exercises.
+              </br>
+                Lets input "A" 65 times and run the program. 65 seems like an reasonabe assumption for input length as the buffer
+                accepts size upto 64 characters right?. Counting each and every time we press "A" is tedious and this is where
+                python programming comes in handy. All you have to do is open python interpreter and type
+                <code>
+                  "A"*65
+                </code>
+                and voila, we get our string. Now, we run the program again and we get
+              </p>
+
+              <a href="img/protostar/stack0/img3.png">
+                <img class="img-fluid" src="img/protostar/stack0/img3.png" alt="">
+              </a>
+
+              <p>
+                We have sucessfully, changed the variable 'modified' and altered the code flow. Now of to the next exercise.
+              </p>
+
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <hr>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <ul class="list-inline text-center">
+              <li class="list-inline-item">
+                <a href="https://twitter.com/mangekyou_ch">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="https://www.facebook.com/KoushikJanakiraman">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="https://www.linkedin.com/in/chandramoulijanakiraman/">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+            </ul>
+            <p class="copyright text-muted">Copyright &copy; Zestall.com 2017</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/popper/popper.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="js/clean-blog.min.js"></script>
+
+  </body>
+
+</html>

